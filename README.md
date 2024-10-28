@@ -10,3 +10,7 @@
 - Differences file update and changes
 - Whitelist itself from detection (W.I.P)
 - Detect changes (do this by making dummy processes)
+
+# Run Instructions:
+- As of now in order to execute this you must have both of the ps1 files in the same directory and then do:
+- `powershell -ExecutionPolicy Bypass -File "C:{path_to_desired_location}\setup_autoruns_service.ps1"`
