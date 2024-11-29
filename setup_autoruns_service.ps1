@@ -1,7 +1,8 @@
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
+# Suppress any output from Add-Type commands
+[void](Add-Type -AssemblyName System.Windows.Forms | Out-Null)
+[void](Add-Type -AssemblyName System.Drawing | Out-Null)
 
-Add-Type @"
+[void](Add-Type @"
     using System;
     using System.Runtime.InteropServices;
     public class Win32 {
@@ -9,10 +10,12 @@ Add-Type @"
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
     }
-"@
+"@ | Out-Null)
 
+# Suppress any output from the ShowWindowAsync call
 $consoleWindow = (Get-Process -Id $PID).MainWindowHandle
-[Win32]::ShowWindowAsync($consoleWindow, 0)
+[void][Win32]::ShowWindowAsync($consoleWindow, 0)
+
 
 # Define paths and variables
 $desktopPath = "C:\WinSP\"
@@ -43,7 +46,7 @@ function Install-PowerShell7 {
     Write-Host "Installing PowerShell 7..."
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
         Write-Host "winget is not available. Please install PowerShell 7 manually."
-        return $false
+        return
     }
 
     try {
@@ -86,7 +89,7 @@ function Stop-OtherInstances {
     }
 }
 
-if (-not $env:RUNNING_IN_PWSH7) {
+if (-not $env:RUNNING_IN_PWSH7 | Out-Null) {
     if ($PSVersionTable.PSEdition -ne 'Core' -or $PSVersionTable.Major -lt 7) {
         if (-not (Test-Path $pwshExePath)) {
             if (-not (Install-PowerShell7)) {
