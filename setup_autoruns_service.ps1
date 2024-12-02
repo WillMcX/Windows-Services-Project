@@ -1,4 +1,3 @@
-# Suppress any output from Add-Type commands
 [void](Add-Type -AssemblyName System.Windows.Forms | Out-Null)
 [void](Add-Type -AssemblyName System.Drawing | Out-Null)
 
@@ -12,12 +11,10 @@
     }
 "@ | Out-Null)
 
-# Suppress any output from the ShowWindowAsync call
 $consoleWindow = (Get-Process -Id $PID).MainWindowHandle
 [void][Win32]::ShowWindowAsync($consoleWindow, 0)
 
 
-# Define paths and variables
 $desktopPath = "C:\WinSP\"
 $apiKeyPath = "C:\WinSP\apikey.txt"
 $nssmDownloadUrl = "https://nssm.cc/release/nssm-2.24.zip"
@@ -72,13 +69,10 @@ function Stop-OtherInstances {
         return
     }
 
-    # Ensure we only target instances running the same script
     Get-Process -Name "pwsh", "powershell" -ErrorAction SilentlyContinue | ForEach-Object {
         try {
             $processId = $_.Id
             $cmdLine = (Get-CimInstance Win32_Process -Filter "ProcessId = $processId").CommandLine
-
-            # Check if the process is running the same script and is not the current process
             if ($cmdLine -match [regex]::Escape($currentScriptPath) -and $processId -ne $currentPid) {
                 Write-Host "Stopping another instance of the script with PID $processId"
                 Stop-Process -Id $processId -Force
@@ -89,7 +83,7 @@ function Stop-OtherInstances {
     }
 }
 
-if (-not $env:RUNNING_IN_PWSH7 | Out-Null) {
+if (-not $env:RUNNING_IN_PWSH7) {
     if ($PSVersionTable.PSEdition -ne 'Core' -or $PSVersionTable.Major -lt 7) {
         if (-not (Test-Path $pwshExePath)) {
             if (-not (Install-PowerShell7)) {

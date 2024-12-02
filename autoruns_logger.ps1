@@ -225,7 +225,6 @@ function Check-VirusTotal {
 
     $results | Export-Csv -Path $outputCsvPath -NoTypeInformation -Force
 
-    # Write the number of positives to the text file
     try {
         Set-Content -Path $positivesFilePath -Value $positivesDetectedCount
         Log-Message "Number of positives ($positivesDetectedCount) written to $positivesFilePath"

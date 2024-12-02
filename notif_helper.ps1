@@ -4,13 +4,11 @@ param (
     [string]$LockFilePath = "C:\WinSP\notif_lock.txt"
 )
 
-# Ensure BurntToast module is installed
 if (-not (Get-Module -ListAvailable -Name BurntToast)) {
     Install-Module -Name BurntToast -Scope CurrentUser -Force -SkipPublisherCheck
 }
 Import-Module BurntToast -Force
 
-# Function to download and save an image locally
 function Download-Image {
     param (
         [string]$ImageUrl,
@@ -27,7 +25,6 @@ function Download-Image {
     }
 }
 
-# Function to send a notification
 function Send-Notification {
     param (
         [string]$Message,
@@ -46,7 +43,6 @@ function Send-Notification {
     }
 }
 
-# Check if the lock file exists (to ensure only one instance runs)
 if (Test-Path $LockFilePath) {
     $existingPID = Get-Content -Path $LockFilePath -ErrorAction SilentlyContinue
     if (Get-Process -Id $existingPID -ErrorAction SilentlyContinue) {
@@ -55,10 +51,8 @@ if (Test-Path $LockFilePath) {
     }
 }
 
-# Create a lock file with the current process ID
 $PID | Set-Content -Path $LockFilePath -Force
 
-# Initialize tracking file
 if (-not (Test-Path $CacheFilePath)) {
     New-Item -Path $CacheFilePath -ItemType File -Force | Out-Null
 }
@@ -66,11 +60,9 @@ if (-not (Test-Path $CacheFilePath)) {
 Write-Host "Monitoring $PositivesFilePath for changes..."
 $lastModifiedTime = $null
 
-# Set the logo URL and local path
 $logoUrl = "https://raw.githubusercontent.com/WillMcX/Windows-Services-Project-WinSP/refs/heads/main/WinSP_logo.png"
 $tempLogoPath = "$env:TEMP\WinSP_logo.png"
 
-# Download the logo image
 if (-not (Test-Path $tempLogoPath)) {
     Download-Image -ImageUrl $logoUrl -DestinationPath $tempLogoPath | Out-Null
 }
@@ -83,7 +75,6 @@ try {
             if ($currentModifiedTime -ne $lastModifiedTime) {
                 $lastModifiedTime = $currentModifiedTime
 
-                # Ensure currentValue is treated as an integer for comparison
                 $currentValue = (Get-Content -Path $PositivesFilePath -Raw).Trim()
                 $lastSentValue = Get-Content -Path $CacheFilePath -ErrorAction SilentlyContinue
 
@@ -106,7 +97,6 @@ try {
 } catch {
     Write-Host "Error in monitoring: $_"
 } finally {
-    # Remove the lock file on exit
     if (Test-Path $LockFilePath) {
         Remove-Item -Path $LockFilePath -Force
     }
