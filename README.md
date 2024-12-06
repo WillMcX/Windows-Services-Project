@@ -11,6 +11,17 @@ The **Windows Service Protector** or **WinSP** is a comprehensive Windows servic
 
 ---
 
+## Installer Link / Instructions**
+
+   The `WinSP.exe` is now available to download from : [WinSP Installer](https://drive.google.com/file/d/16CaJVxOxX-QlInnZ5p9jC3Y2AaUgBlv7/view?usp=sharing)
+
+   - Currently this is running a self signed certificate, and will prompt a Defender Smartscreen notification. I can assure (as well as you may code review) see that this program is for the quick opposite purpose
+   - 
+   
+
+
+---
+
 ## **System Features**
 
 ### 1. **Service Management**
