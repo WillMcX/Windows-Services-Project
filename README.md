@@ -166,7 +166,7 @@ The **Windows Service Protector** or **WinSP** is a comprehensive Windows servic
 
 ## **Prerequisites**
 
-1. **Windows 10/11** or **Windows Server 2019/2022**.
+1. **Windows 10/11**
 2. **PowerShell 7.x** (Installed Dependency).
 3. **NSSM (Non-Sucking Service Manager)**.
 4. **Sysinternals Autoruns**.
